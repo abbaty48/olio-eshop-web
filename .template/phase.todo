@@ -1,0 +1,15 @@
+--  Create project
+--  Install packages
+--  Implement UI Template
+        -   Assets
+        --  Layout
+        --  Components
+        --- Accessibility
+--  Enhance UI
+        -   Animation
+        --  PWA
+--  Implement Database schema and seeds
+--  Implement CRUD Operation
+--  Implement Authentication
+--  Visitors Route
+--  Implement Payment.
