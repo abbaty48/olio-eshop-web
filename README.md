@@ -1,40 +1,52 @@
-# Welcome to Remix!
+# Project Title: Olio Furniture's E-Web Store.
+## Objective:
+>To develop a E-commerce web store for selling home and office furniture's, in this context, we call it Olio.
 
-- 📖 [Remix docs](https://remix.run/docs)
+### Overview:
+> Olio is a web store for selling ergonomic furniture's for home and office.
 
-## Development
+#### Key Features:
+1. Online E-commerce.
+2. Free and Commercial Shipping.
+3. Fast Shipping.
+4. Secure Authentication - `Passkey`, `Social Login`.
+5. Modern and Secure Payment system - `Stripe`.
+6. Sleek and Fast Website.
+7. Progress Web App **PWA**
 
-Run the dev server:
+##### Technology Stack:
+- **Development Target**: React Remix, Typescript.
+- **Programming Language**: Typescript.
+- **FrontEnd Framework**: React Remix, Vite.
+- **FrontEnd Packages**: Stripe, auth0, heroicons, tailwindcss, tailwindcss-motion, postcss, autoprefixer, @prisma/client, prisma, zod, clsx  and more.
+- **BackEnd Framework & Packages**: Remix Server, Typescript, Prisma,
+- **Database**: SQLite
+- **Hosting Environment**: OnRender
 
-```shellscript
-npm run dev
-```
+###### Implementation Steps:
+- **Create project**
+-  **Install packages**
+-  **Implement UI Template**
+        -  *Assets*
+        -  *Layout*
+        -  *Components*
+        - *Accessibility*
+-  **Enhance UI**
+        -   *Animation*
+        -  *PWA*
+-  **Implement Database schema and seeds**
+-  **Implement CRUD Operation**
+-  **Implement Authentication**
+-  **Visitors Route**
+-  **Implement Payment.**
 
-## Deployment
+###### Challenges:
+- Use `Blue Stack` or `Grunge Stack`
+- Using Long Running Web Server environment (`Indie Stack`) rather this should be on a Cloud Server or Edge environment.
+- Use a better database like `Postgre`, `MySql`, `No Document Sql`, currently using a small embedded database `SQLite`
 
-First, build your app for production:
-
-```sh
-npm run build
-```
-
-Then run the app in production mode:
-
-```sh
-npm start
-```
-
-Now you'll need to pick a host to deploy it to.
-
-### DIY
-
-If you're familiar with deploying Node applications, the built-in Remix app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-- `build/server`
-- `build/client`
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever css framework you prefer. See the [Vite docs on css](https://vitejs.dev/guide/features.html#css) for more information.
+###### Potential Future Enhancements:
+- Extending the system for a mobile app.
+- Use 3D Furniture's
+- Support Mixed Reality `AR`/`ER`
+- Support Multi-Languages
