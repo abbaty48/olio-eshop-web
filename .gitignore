@@ -3,3 +3,4 @@ phase.todo
 /.cache
 /build
 .env
+public/features/gitignore
