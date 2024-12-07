@@ -29,12 +29,17 @@
         font: 62.5% 400 Lato;
     }
 
+    html,
+    body {
+        height: 100svh;
+        height: 100dvh;
+        height: 100dvh;
+        overflow: hidden;
+        min-width: 320px;
+    }
+
     body {
         @apply bg-white;
-        min-height: 100svh;
-        min-height: 100dvh;
-        min-height: 100vh;
-        min-width: 320px;
     }
 
     h1 {

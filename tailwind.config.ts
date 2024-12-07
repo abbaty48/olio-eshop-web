@@ -1,4 +1,6 @@
 import type { Config } from "tailwindcss";
+import "tailwindcss-motion";
+
 const baseFontSize = 10;
 export default {
     content: ["./app/**/{**,.client,.server}/**/*.{js,jsx,ts,tsx}"],
@@ -54,7 +56,7 @@ export default {
                 "2xl": [
                     `${(16 * 1.5) / baseFontSize}rem`, /* 24px */
                     {
-                        ineHeight: `${(16 * 2) / baseFontSize}rem` /* 32px */,
+                        lineHeight: `${(16 * 2) / baseFontSize}rem` /* 32px */,
                     },
                 ],
                 "3xl": [
@@ -72,31 +74,31 @@ export default {
                 "5xl": [
                     `${(16 * 3) / baseFontSize}rem`, /* 48px */
                     {
-                        lineHeight: (16 * 1) / baseFontSize,
+                        lineHeight: (16 * 1) / baseFontSize + 'rem',
                     },
                 ],
                 "6xl": [
                     `${(16 * 3.75) / baseFontSize}rem`, /* 60px */
                     {
-                        lineHeight: (16 * 1) / baseFontSize,
+                        lineHeight: (16 * 1) / baseFontSize + 'rem',
                     },
                 ],
                 "7xl": [
                     `${(16 * 4.5) / baseFontSize}rem`, /* 72px */
                     {
-                        lineHeight: (16 * 1) / baseFontSize,
+                        lineHeight: (16 * 1) / baseFontSize + 'rem',
                     },
                 ],
                 "8xl": [
                     `${(16 * 6) / baseFontSize}rem`, /* 96px */
                     {
-                        lineHeight: (16 * 1) / baseFontSize,
+                        lineHeight: (16 * 1) / baseFontSize + 'rem',
                     },
                 ],
                 "9xl": [
                     `${(16 * 8) / baseFontSize}rem`, /* 128px */
                     {
-                        lineHeight: (16 * 1) / baseFontSize,
+                        lineHeight: (16 * 1) / baseFontSize + 'rem',
                     },
                 ],
             },
@@ -114,5 +116,5 @@ export default {
             },
         },
     },
-    plugins: [],
+    plugins: [require('tailwindcss-motion')],
 } satisfies Config;

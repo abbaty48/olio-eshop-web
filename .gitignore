@@ -4,3 +4,4 @@ phase.todo
 /build
 .env
 public/features/gitignore
+coderepo.ignore.js
