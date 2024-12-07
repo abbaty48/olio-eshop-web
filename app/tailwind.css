@@ -65,6 +65,11 @@
         height: 2rem;
     }
 
+    svg#menu {
+        width: 6rem;
+        height: 6rem;
+    }
+
     img {
         width: 100%;
         object-fit: cover;

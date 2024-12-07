@@ -1,4 +1,5 @@
 import { useCallback, useState } from "react"
+import { Menu } from "~/components/menu"
 import { Link } from "@remix-run/react"
 import clsx from "clsx"
 
@@ -35,6 +36,7 @@ export default function () {
             <p className="text-[1.8rem] md:text-[3.2rem] font-light motion-preset-slide-down text-pretty">Ergonomic Furniture's for Home and Office.</p>
             <Link to={'/products'} className="inline-block py-2 px-4 md:py-4 md:px-10 bg-primary md:text-[1.8rem] text-white font-black mx-auto rounded-full hover:motion-preset-focus">View More</Link>
         </header>
+        <Menu />
         <MotionSlider />
     </section>
 }
