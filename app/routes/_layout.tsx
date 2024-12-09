@@ -1,22 +1,11 @@
 import { RiHome9Line, RiLoginBoxLine, RiSearch2Line, RiShoppingBasket2Line } from "react-icons/ri";
 import { MdOutlineShoppingCartCheckout } from "react-icons/md";
 import Tag from '/7a5b0f1328aa7be1d1bde754e8dd67ffc.webp'
-import { Link, NavLink, Outlet } from "@remix-run/react";
 import { LiaShippingFastSolid } from "react-icons/lia";
+import { MainLink } from "~/components/menuLink";
+import { Link, Outlet } from "@remix-run/react";
 import { BiCategory } from "react-icons/bi";
-import { HTMLAttributes } from "react";
-import clsx from "clsx";
 
-// put this into it component file
-type TMainLinkProp = HTMLAttributes<HTMLAnchorElement> & {
-    to: string;
-    icon: React.ReactNode
-}
-function MainLink({ to, icon, ...props }: TMainLinkProp) {
-    return <NavLink to={to}  {...props} className={({ isActive }) => clsx(props.className, 'hover:text-primary', isActive && 'text-primary')}>
-        {icon}
-    </NavLink>
-}
 export default function () {
     return (<main className="grid grid-cols-[minmax(3rem,_auto),_1fr] bg-gray-50 h-full overflow-hidden">
         <aside className="bg-white shadow-[0px_5px_50px_#dbdbdb]">
