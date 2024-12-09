@@ -12,7 +12,7 @@ export default function () {
             <nav className="h-full md:px-10">
                 <ul className="flex flex-col justify-between items-center h-full gap-5 md:gap-10 text-icon">
                     <Link to="/" className="grid place-items-center mt-4 mb-10"><img src={Tag} alt="Olio.com" width={42} height={42} className="w-7/12 md:w-11/12" /></Link>
-                    <MainLink title="Main" to="/" icon={<RiHome9Line className="md:size-8" />} />
+                    <MainLink title="Main" to="/" icon={<RiHome9Line className="md:size-8"/>} />
                     <MainLink title="Products" to="/products" icon={<BiCategory className="md:size-8" />} />
                     <MainLink title="Search" to="/search" icon={<RiSearch2Line className="md:size-8" />} />
                     <MainLink title="Carts" to="/carts" icon={<RiShoppingBasket2Line className="md:size-8" />} />

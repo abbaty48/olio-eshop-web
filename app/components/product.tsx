@@ -1,5 +1,5 @@
 import { TbShoppingCartPlus } from "react-icons/tb";
-import { useFetcher } from "@remix-run/react";
+import { Link, useFetcher } from "@remix-run/react";
 import { TProduct } from "~/modules/types";
 
 type TProps = {
@@ -76,4 +76,17 @@ export function Product({ product, size }: TProps) {
             case 'large': return <LargeProduct />
         }
     })()
+}
+
+export function SearchProduct({ id, name, desc, price, feature }: TProduct) {
+    return <Link key={id} to={`/products/${id}`}>
+        <figure className="inline-flex flex-wrap items-center gap-5 py-6 px-4 hover:bg-white">
+            <div className="flex flex-wrap items-center gap-5">
+                <img src={`/features/${feature}`} alt={desc || name} className="w-[100px] h-[100px] md:w-[200px] md:h-[200px]" width={200} height={200} />
+                <span className="text-primary font-light text-xl md:text-[5rem]">
+                    {Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price)} </span>
+            </div>
+            <figcaption className="flex flex-wrap justify-between font-light text-xl md:text-[5rem] uppercase leading-[70px] break-words text-wrap whitespace-break-spaces">{name} </figcaption>
+        </figure>
+    </Link>
 }
