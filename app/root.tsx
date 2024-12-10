@@ -1,3 +1,4 @@
+import "./tailwind.css";
 import {
     Links,
     Meta,
@@ -5,10 +6,20 @@ import {
     Scripts,
     ScrollRestoration,
 } from "@remix-run/react";
-import type { LinksFunction } from "@remix-run/node";
+import type { LinksFunction, MetaFunction } from "@remix-run/node";
+import og from '/features/olios_ogimage.png'
 
-import "./tailwind.css";
-
+export const meta: MetaFunction = () => [
+    { title: 'Modern appealing ergonomic appliance for home and office..' },
+    { name: 'description', content: 'We sell modern edged ergonomics appliance for home and office furniture\'s. At Olio, you can find chairs,beds,office sets, room sets, and very more.' },
+    { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+    { name: 'og:image', content: og },
+    { name: 'og:title', content: 'Modern appealing ergonomic appliance for home and office..' },
+    { name: 'twitter:title', content: 'Modern appealing ergonomic appliance for home and office..' },
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:creator', content: '@olios_furniture\'s' },
+    { name: 'robots', content: 'index' }
+]
 export const links: LinksFunction = () => [
     { rel: "preconnect", href: "https://fonts.googleapis.com" },
     {
@@ -27,7 +38,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <html lang="en">
             <head>
                 <meta charSet="utf-8" />
-                <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <Meta />
                 <Links />
             </head>

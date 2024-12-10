@@ -8,17 +8,17 @@ import { BiCategory } from "react-icons/bi";
 
 export default function () {
     return (<main className="grid grid-cols-[minmax(3rem,_auto),_1fr] bg-gray-50 h-full overflow-hidden">
-        <aside className="bg-white shadow-[0px_5px_50px_#dbdbdb]">
+        <aside className="bg-white shadow-[0px_5px_50px_#dbdbdb]" aria-label="site navigations">
             <nav className="h-full md:px-10">
                 <ul className="flex flex-col justify-between items-center h-full gap-5 md:gap-10 text-icon">
-                    <Link to="/" className="grid place-items-center mt-4 mb-10"><img src={Tag} alt="Olio.com" width={42} height={42} className="w-7/12 md:w-11/12" /></Link>
-                    <MainLink title="Main" to="/" icon={<RiHome9Line className="md:size-8"/>} />
-                    <MainLink title="Products" to="/products" icon={<BiCategory className="md:size-8" />} />
-                    <MainLink title="Search" to="/search" icon={<RiSearch2Line className="md:size-8" />} />
-                    <MainLink title="Carts" to="/carts" icon={<RiShoppingBasket2Line className="md:size-8" />} />
-                    <MainLink title="Checkouts" to="/checkouts" icon={<MdOutlineShoppingCartCheckout className="md:size-8" />} />
-                    <MainLink title="Orders" to="/orders" icon={<LiaShippingFastSolid className="md:size-8" />} />
-                    <MainLink title="Login" to="/auth" icon={<RiLoginBoxLine className="md:size-8" />} className="mt-auto my-4" />
+                    <li><Link to="/" aria-current="page" className="grid place-items-center mt-4 mb-10"><img src={Tag} alt="Olio.com" width={42} height={42} className="w-7/12 md:w-11/12" /></Link></li>
+                    <li><MainLink to="/" aria-current="page" aria-label="View Homepage" icon={<RiHome9Line className="md:size-8" />} /></li>
+                    <li><MainLink to="/products" aria-label="View Products" icon={<BiCategory className="md:size-8" />} /></li>
+                    <li><MainLink to="/search" aria-label="Search Products" icon={<RiSearch2Line className="md:size-8" />} /></li>
+                    <li> <MainLink to="/carts" aria-label="View your carts" icon={<RiShoppingBasket2Line className="md:size-8" />} /></li>
+                    <li><MainLink to="/checkouts" aria-label="View your checkout lists" icon={<MdOutlineShoppingCartCheckout className="md:size-8" />} /></li>
+                    <li><MainLink to="/orders" aria-label="Check your orders" icon={<LiaShippingFastSolid className="md:size-8" />} /></li>
+                    <li><MainLink to="/auth" aria-label="Login" icon={<RiLoginBoxLine className="md:size-8" />} className="mt-auto my-4" /></li>
                 </ul>
             </nav>
         </aside>

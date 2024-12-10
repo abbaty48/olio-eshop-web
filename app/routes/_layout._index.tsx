@@ -15,7 +15,7 @@ function MotionSlider() {
     const [feature, set] = useState(() => slideIMGs[0])
     const slideAt = useCallback((index = 0) => set(slideIMGs[index]), [])
     return <div className={`w-full h-full`}>
-        <img src={`public/features/${feature}`} />
+        <img src={`public/features/${feature}`} role="presentation" alt="" />
         <ul className="absolute bottom-10 right-20 flex gap-4 group"> {
             slideIMGs.map((slide, index) => (
                 <li key={index} onClick={() => slideAt(index)} className={clsx(
@@ -29,13 +29,13 @@ function MotionSlider() {
 }
 
 export default function () {
-    return <section className="relative h-full overflow-hidden">
-        <header className="absolute left-1/2 -translate-x-1/2 text-center uppercase
-         motion-preset-fade space-y-7 py-4">
+    return <section className="relative h-full overflow-hidden" aria-label="Main Home page">
+        <div className="absolute left-1/2 -translate-x-1/2 text-center uppercase
+         motion-preset-fade space-y-7 py-4" aria-labelledby="#p-index">
             <h1 className="text-[10rem] md:text-[22rem] font-thin motion-preset-slide-up">Olio</h1>
-            <p className="text-[1.8rem] md:text-[3.2rem] font-light motion-preset-slide-down text-pretty">Ergonomic Furniture's for Home and Office.</p>
-            <Link to={'/products'} className="inline-block py-2 px-4 md:py-4 md:px-10 bg-primary md:text-[1.8rem] text-white font-black mx-auto rounded-full hover:motion-preset-focus">View More</Link>
-        </header>
+            <p id="p-index" className="text-[1.8rem] md:text-[3.2rem] font-light motion-preset-slide-down text-pretty">Ergonomic Furniture's for Home and Office.</p>
+            <Link to={'/products'} className="inline-block py-2 px-4 md:py-4 md:px-10 bg-primary md:text-[1.8rem] text-white font-black mx-auto rounded-full hover:motion-preset-focus">View Products</Link>
+        </div>
         <Menu />
         <MotionSlider />
     </section>

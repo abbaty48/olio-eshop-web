@@ -28,10 +28,10 @@ export function Cart({ cartId, productId, subPrice, quantity, addedOn, product }
                                 </dl>
                             </figcaption>
                         </figure>
-                        <fetcher.Form className='flex items-center justify-end gap-2 p-2'>
-                            <button className='hover:motion-preset-pulse-sm active:motion-preset-compress'><IoAddCircle /></button>
-                            <button className='hover:motion-preset-pulse-sm active:motion-preset-compress'><IoRemoveOutline /></button>
-                            <button className='hover:motion-preset-pulse-sm active:motion-preset-compress'><MdRemoveShoppingCart /></button>
+                        <fetcher.Form title={`Manage the cart for ${product.name}`} className='flex items-center justify-end gap-2 p-2' aria-label='Increment / Decrement / Remove a cart.'>
+                            <button aria-label={'Increment 1 more quantity of cart.'} className='hover:motion-preset-pulse-sm active:motion-preset-compress'><IoAddCircle /></button>
+                            <button aria-label='Decrement 1 more quantity of cart,' className='hover:motion-preset-pulse-sm active:motion-preset-compress'><IoRemoveOutline /></button>
+                            <button aria-label='Remove the cart from the carts list.' className='hover:motion-preset-pulse-sm active:motion-preset-compress'><MdRemoveShoppingCart /></button>
                         </fetcher.Form>
                     </article>
                 </div>
@@ -45,8 +45,8 @@ export function Cart({ cartId, productId, subPrice, quantity, addedOn, product }
                             <small className='text-xs font-extrabold text-orange-400'>The product associated with this cart is currently not available in the store.</small>
                         </p>
                     </div>
-                    <fetcher.Form className='flex items-center justify-end gap-2 p-2'>
-                        <button className='hover:motion-preset-pulse-sm active:motion-preset-compress'><MdRemoveShoppingCart /></button>
+                    <fetcher.Form className='flex items-center justify-end gap-2 p-2' aria-label='Remove the cart form the carts list'>
+                        <button aria-label='Remove the cart from the carts list.' className='hover:motion-preset-pulse-sm active:motion-preset-compress'><MdRemoveShoppingCart /></button>
                     </fetcher.Form>
                 </div>
             )
@@ -58,16 +58,16 @@ export function Cart({ cartId, productId, subPrice, quantity, addedOn, product }
 export default function () {
     return (<article className="md:px-8 px-2 py-8 space-y-5">
         <PageTitle title={<p>Carts <sup>({carts.length})</sup></p>} />
-        <section className='space-y-5'>
+        <section className='space-y-5' aria-label='Carts Section'>
             {/* cart list */}
             <article className="grid grid-cols-[repeat(auto-fit,minmax(min(45em,100%),1fr))] gap-1">
                 {carts.map(cart => <Cart {...cart} />)}
             </article>
             {/* cart pagination */}
             <div className='flex'>
-                <button className="hover:motion-preset-pulse-sm active:motion-preset-compress disabled:pointer-events-none disabled:opacity-30 p-2 md:p-4">
+                <button aria-label="Get the previous paginated carts list." className="hover:motion-preset-pulse-sm active:motion-preset-compress disabled:pointer-events-none disabled:opacity-30 p-2 md:p-4">
                     <HiChevronLeft /></button>
-                <button className="hover:motion-preset-pulse-sm active:motion-preset-compress disabled:pointer-events-none disabled:opacity-30 p-2 md:p-4 bg-white text-2xl font-thin flex gap-3 items-center border-none"><HiOutlineRefresh className='animate-spin' /> Load More
+                <button aria-label="Get the next paginated carts list." className="hover:motion-preset-pulse-sm active:motion-preset-compress disabled:pointer-events-none disabled:opacity-30 p-2 md:p-4 bg-white text-2xl font-thin flex gap-3 items-center border-none"><HiOutlineRefresh className='animate-spin' /> Load More
                 </button>
             </div>
         </section>

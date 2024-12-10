@@ -18,8 +18,8 @@ const products: TProduct[] = [
 export default function () {
     return <div className="flex flex-col items-center justify-between md:px-8 px-2 py-8 space-y-5">
         <Menu />
-        <search className="w-11/12">
-            <Form className="w-full">
+        <search className="w-11/12" >
+            <Form className="w-full" aria-label='Search for a product'>
                 <label className="space-y-5">
                     <input type="search" className="px=5 md:px-10 py-2 md:py-5 border-b border-b-ring text-2xl md:text-8xl font-thin bg-transparent outline-none uppercase" />
                     <span className="block text-xl md:text-2xl font-light">
@@ -36,9 +36,9 @@ export default function () {
         </article>
         {/* cart pagination */}
         <div className='flex'>
-            <button className="hover:motion-preset-pulse-sm active:motion-preset-compress disabled:pointer-events-none disabled:opacity-30 p-4">
+            <button aria-label="Previous paginated products" className="hover:motion-preset-pulse-sm active:motion-preset-compress disabled:pointer-events-none disabled:opacity-30 p-4">
                 <HiChevronLeft /></button>
-            <button className="hover:motion-preset-pulse-sm active:motion-preset-compress disabled:pointer-events-none disabled:opacity-30 p-4 bg-white text-2xl font-thin flex gap-3 items-center border-none"><HiOutlineRefresh className='animate-spin' /> Load More
+            <button aria-label="Get next paginated products" className="hover:motion-preset-pulse-sm active:motion-preset-compress disabled:pointer-events-none disabled:opacity-30 p-4 bg-white text-2xl font-thin flex gap-3 items-center border-none"><HiOutlineRefresh className='animate-spin' /> Load More
             </button>
         </div>
     </div>

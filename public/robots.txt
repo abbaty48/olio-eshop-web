@@ -1,0 +1,5 @@
+User-Agent: *
+Disallowed: /carts/
+Disallowed: /checkouts/
+Disallowed: /orders/
+Allowed: /$

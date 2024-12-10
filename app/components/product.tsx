@@ -21,10 +21,10 @@ export function Product({ product, size }: TProps) {
         </figure>
         <div className="flex justify-between items-center">
             <p className="text-primary font-bold">{Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price)}</p>
-            <fetcher.Form>
+            <fetcher.Form title={name} role="radio">
                 {/* if added TbShoppingCartMinus */}
                 {/* if error uses  TbShoppingCartExclamation*/}
-                <button className="transition-all hover:stroke-primary hover:ring-1 hover:ring-primary p-4 hover:rounded-full"><TbShoppingCartPlus /></button>
+                <button className="transition-all hover:stroke-primary hover:ring-1 hover:ring-primary p-4 hover:rounded-full" aria-label="add the product to your card/remove the product from your cart"><TbShoppingCartPlus /></button>
             </fetcher.Form>
         </div>
     </article>
@@ -40,10 +40,10 @@ export function Product({ product, size }: TProps) {
         </figure>
         <div className="flex justify-between items-center">
             <p className="text-primary font-bold">{Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price)}</p>
-            <fetcher.Form>
+            <fetcher.Form title={name} role="radio">
                 {/* if added TbShoppingCartMinus */}
                 {/* if error uses  TbShoppingCartExclamation*/}
-                <button className="transition-all hover:stroke-primary hover:ring-1 hover:ring-primary p-4 hover:rounded-full"><TbShoppingCartPlus /></button>
+                <button className="transition-all hover:stroke-primary hover:ring-1 hover:ring-primary p-4 hover:rounded-full" aria-label="add the product to your card/remove the product from your cart"><TbShoppingCartPlus /></button>
             </fetcher.Form>
         </div>
     </article>
@@ -61,10 +61,10 @@ export function Product({ product, size }: TProps) {
         </figure>
         <div className="col-span-3 flex w-full justify-between items-center">
             <p className=" text-primary font-bold">{Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price)}</p>
-            <fetcher.Form>
+            <fetcher.Form title={name}>
                 {/* if added TbShoppingCartMinus */}
                 {/* if error uses  TbShoppingCartExclamation*/}
-                <button className="transition-all hover:stroke-primary hover:ring-1 hover:ring-primary p-4 hover:rounded-full"><TbShoppingCartPlus /></button>
+                <button className="transition-all hover:stroke-primary hover:ring-1 hover:ring-primary p-4 hover:rounded-full" aria-label="add the product to your card/remove the product from your cart"><TbShoppingCartPlus /></button>
             </fetcher.Form>
         </div>
     </article>
