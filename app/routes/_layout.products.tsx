@@ -1,7 +1,8 @@
 import { Product } from "~/components/product";
+import PageTitle from "~/components/pageTitle";
 import { useMedia } from "~/hooks/useMedia";
-import { Menu } from "~/components/menu";
 import { TProduct } from "~/modules/types";
+import { HiChevronLeft, HiOutlineRefresh } from "react-icons/hi";
 
 const products: TProduct[] = [
     { id: "37f3dbf4fb281a881804faa4b11b826df", name: 'Half Apple', price: 25, desc: 'Half apple red seat', feature: '37f3dbf4fb281a881804faa4b11b826df.avif', tag: 'plastic, seat, red, affordable, small, comfort, anywhere, home, office, kids, children, men, women' },
@@ -18,10 +19,7 @@ export default function () {
     const { media } = useMedia()
 
     return <article className="md:px-8 px-2 py-8 space-y-5">
-        <section className="">
-            <h1 className="font-thin">Products</h1>
-            <Menu />
-        </section>
+        <PageTitle title={'Products'} />
         <section className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-[1fr,auto,auto] overflow-y-auto gap-1 md:grid-flow-dense">
             {
                 products.map((product) => {
@@ -34,6 +32,12 @@ export default function () {
                 })
             }
         </section>
-        <button className="block text-primary my-10 w-auto mx-auto text-sm">Load More Products</button>
+        {/* cart pagination */}
+        <div className='flex'>
+            <button className="hover:motion-preset-pulse-sm active:motion-preset-compress disabled:pointer-events-none disabled:opacity-30 p-4">
+                <HiChevronLeft /></button>
+            <button className="hover:motion-preset-pulse-sm active:motion-preset-compress disabled:pointer-events-none disabled:opacity-30 p-4 bg-white text-2xl font-thin flex gap-3 items-center border-none"><HiOutlineRefresh className='animate-spin' /> Load More
+            </button>
+        </div>
     </article>
 }

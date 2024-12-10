@@ -6,3 +6,12 @@ export type TProduct = {
     feature: string;
     tag: string;
 }
+
+export type TCart = {
+    cartId: string;
+    productId: string;
+    quantity: number;
+    subPrice: number;
+    addedOn: string;
+    product?: TProduct;
+}

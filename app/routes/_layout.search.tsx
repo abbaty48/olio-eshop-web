@@ -1,3 +1,4 @@
+import { HiChevronLeft, HiOutlineRefresh } from "react-icons/hi";
 import { SearchProduct } from "~/components/product";
 import { Menu } from "~/components/menu";
 import { TProduct } from "~/modules/types";
@@ -33,6 +34,12 @@ export default function () {
                 products.map((product) => <SearchProduct {...product} />)
             }
         </article>
-        <button className="block w-auto mx-auto font-light text-xl text-primary my-10 hover:motion-text-out-ring">Load More</button>
+        {/* cart pagination */}
+        <div className='flex'>
+            <button className="hover:motion-preset-pulse-sm active:motion-preset-compress disabled:pointer-events-none disabled:opacity-30 p-4">
+                <HiChevronLeft /></button>
+            <button className="hover:motion-preset-pulse-sm active:motion-preset-compress disabled:pointer-events-none disabled:opacity-30 p-4 bg-white text-2xl font-thin flex gap-3 items-center border-none"><HiOutlineRefresh className='animate-spin' /> Load More
+            </button>
+        </div>
     </div>
 }
