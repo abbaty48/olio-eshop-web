@@ -5,3 +5,4 @@ phase.todo
 .env
 public/features/gitignore
 coderepo.ignore.js
+app/modules/mocks
