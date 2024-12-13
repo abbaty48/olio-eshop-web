@@ -1,0 +1,127 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id   String @default(uuid())
+  name String @unique
+
+  @@id([id, name])
+}
+
+model Product {
+  id        String   @id @default(uuid())
+  sku       String
+  name      String
+  price     Float
+  desc      String?
+  feature   String /// extend this to support an array or object for small_medium_large images
+  category  String
+  material  String
+  color     String
+  tag       String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Cart      Cart[]
+  Order     Order[]
+
+  @@unique([id, sku])
+}
+
+model Cart {
+  cartId     String   @default(cuid())
+  productId  String
+  product    Product? @relation(fields: [productId], references: [id])
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  quantity   Int
+  subPrice   Float
+  addedOn    DateTime @default(now())
+  updatedOn  DateTime @updatedAt
+
+  @@id([cartId, productId, customerId])
+  @@unique([cartId, productId, customerId])
+}
+
+model Order {
+  id         String   @id @default(cuid())
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id])
+  productId  String
+  products   Product  @relation(fields: [productId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Profile {
+  id         String     @id @default(cuid())
+  name       String
+  email      String
+  avatar     String?
+  familyName String?
+  Customer   Customer[]
+}
+
+model Customer {
+  id        String        @id @default(uuid())
+  name      String?
+  email     String        @unique
+  carts     Cart[]
+  orders    Order[]
+  profile   Profile?      @relation(fields: [profileId], references: [id])
+  meta      CustomerMeta?
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  profileId String?
+}
+
+model BillingContactInformation {
+  id             String           @id @default(cuid())
+  name           String
+  contacts       String
+  BillingAddress BillingAddress[]
+}
+
+model BillingAddress {
+  id                          String                    @id @default(uuid())
+  office                      Int?
+  premises                    String?
+  street                      String?
+  city                        String
+  state                       String
+  country                     String
+  name                        String
+  contact                     BillingContactInformation @relation(fields: [billingContactInformationId], references: [id])
+  billingContactInformationId String
+  CustomerMeta                CustomerMeta[]
+}
+
+model PaymentInformation {
+  id           Int            @id @default(autoincrement())
+  cardNumber   String
+  cvv          String
+  cardType     String
+  holderName   String
+  CustomerMeta CustomerMeta[]
+}
+
+model CustomerMeta {
+  id                   String              @id @default(uuid())
+  customerId           String              @unique
+  billing              BillingAddress      @relation(fields: [billingAddressId], references: [id])
+  payment              PaymentInformation? @relation(fields: [paymentInformationId], references: [id])
+  customer             Customer            @relation(fields: [customerId], references: [id])
+  billingAddressId     String
+  paymentInformationId Int?
+}

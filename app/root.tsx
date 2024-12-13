@@ -6,8 +6,8 @@ import {
     Scripts,
     ScrollRestoration,
 } from "@remix-run/react";
-import type { LinksFunction, MetaFunction } from "@remix-run/node";
 import og from '/features/olios_ogimage.png'
+import type { LinksFunction, MetaFunction } from "@remix-run/node";
 
 export const meta: MetaFunction = () => [
     { title: 'Modern appealing ergonomic appliance for home and office..' },

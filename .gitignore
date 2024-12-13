@@ -6,3 +6,4 @@ phase.todo
 public/features/gitignore
 coderepo.ignore.js
 app/modules/mocks
+app/entry.worker.ts
