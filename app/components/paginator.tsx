@@ -3,6 +3,7 @@ import { HiChevronLeft } from "react-icons/hi";
 import { useCallback, useState } from "react";
 
 type TProps = {
+    term?: string;
     nextAriaLabel: string;
     disableNext?: boolean;
     previousAriaLabel: string;
@@ -10,7 +11,7 @@ type TProps = {
     fetcher: FetcherWithComponents<any>
 }
 
-export function Paginator({ fetcher, nextAriaLabel, previousAriaLabel, disableNext, disablePrevious, }: TProps) {
+export function Paginator({ fetcher, term, nextAriaLabel, previousAriaLabel, disableNext, disablePrevious, }: TProps) {
     const [page, set] = useState(1)
     const path = useLocation().pathname;
 
@@ -28,5 +29,6 @@ export function Paginator({ fetcher, nextAriaLabel, previousAriaLabel, disableNe
             disabled={disableNext} className="hover:motion-preset-pulse-sm active:motion-preset-compress disabled:pointer-events-none disabled:opacity-30 p-4 bg-white text-sm font-thin flex gap-3 items-center border-none" >
             Load More
         </button>
+        <input type="hidden" name={'term'} value={term} />
     </fetcher.Form >)
 }
