@@ -31,7 +31,7 @@ export default function () {
         </search>
         <article className="flex-1 grid grid-cols-[repeat(auto-fit,minmax(min(40rem,100%),1fr))] auto-rows-auto gap-  w-full py-10">
             {
-                products.map((product) => <SearchProduct {...product} />)
+                products.map((product) => <SearchProduct key={product.id} {...product} />)
             }
         </article>
         {/* cart pagination */}
