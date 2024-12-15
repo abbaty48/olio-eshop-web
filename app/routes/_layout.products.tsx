@@ -1,18 +1,18 @@
-import { useFetcher, useLocation } from "@remix-run/react";
+import { Outlet, useFetcher, useLocation } from "@remix-run/react";
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { prismaDB } from "~/modules/.servers/db.server";
 import { useEffect, useMemo, useState } from "react";
+import { TFetcher, TProduct } from "~/modules/types";
 import { Paginator } from "~/components/paginator";
 import { Product } from "~/components/product";
 import PageTitle from "~/components/pageTitle";
 import { useMedia } from "~/hooks/useMedia";
 import { ImSpinner2 } from "react-icons/im";
-import { TFetcher, TProduct } from "~/modules/types";
 
 const LIMIT = 5;
 export async function loader({ request }: LoaderFunctionArgs) {
     const page = Number(new URL(request.url).searchParams.get('page') ?? 1)
-    const [count, products] = await prismaDB.$transaction(
+    const [count, payload] = await prismaDB.$transaction(
         [
             prismaDB.product.count(),
             prismaDB.product.findMany({
@@ -24,7 +24,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     )
     const hasPreviousData = page > 1;
     const hasNextData = page < Math.ceil(count / LIMIT)
-    return { page, count, hasPreviousData, hasNextData, payload: products }
+    return { page, count, hasPreviousData, hasNextData, payload }
 }
 
 export default function () {
@@ -48,22 +48,22 @@ export default function () {
         })
     }, [fetcher.data])
 
-    return <article className={'relative h-full overflow-hidden'}>
+    return <article className={'relative min-h-screen'}>
         {isFetching && (
-            <div className="absolute grid place-items-center inset-full top-0 right-0 bottom-0 left-0 bg-white/85 w-full h-full motion-safe:animate-pulse">
+            <div className="absolute grid place-items-center inset-full top-0 right-0 bottom-0 left-0 bg-white/85 w-full  motion-safe:animate-pulse overflow-hidden">
                 <ImSpinner2 className="animate-spin size-20 fill-primary" />
             </div>
         )
         }
-        <article className="grid grid-rows-[auto,1fr,auto] md:px-8 py-2 space-y-4 overflow-y-auto max-h-screen">
+        <article className="grid grid-rows-[auto,1fr,auto] md:px-8 py-4 space-y-4">
             <PageTitle title={!isFetching && `Products / ${fetcher.data?.page ?? 1}`} />
             <section className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-[1fr,auto,auto] gap-1 md:grid-flow-dense" aria-label="Products list">
                 {products}
             </section>
-            {/* cart pagination */}
             {!isFetching &&
                 <Paginator
                     fetcher={fetcher}
+                    page={fetcher.data?.page ?? 1}
                     disableNext={!fetcher.data?.hasNextData}
                     disablePrevious={!fetcher.data?.hasPreviousData}
                     nextAriaLabel="Read next paginated products"

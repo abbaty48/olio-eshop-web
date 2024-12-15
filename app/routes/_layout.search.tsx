@@ -2,10 +2,10 @@ import { useFetcher, useSearchParams } from "@remix-run/react";
 import { SearchInput } from "~/components/searchInput";
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { prismaDB } from "~/modules/.servers/db.server";
-import { SearchProduct } from "~/components/product";
 import { useCallback, useEffect, useState } from "react";
 import { TFetcher, TProduct } from "~/modules/types";
 import { Paginator } from "~/components/paginator";
+import { Product } from "~/components/product";
 import { ImSpinner2 } from "react-icons/im";
 import { Menu } from "~/components/menu";
 import { Prisma } from "@prisma/client";
@@ -18,7 +18,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     const term = query.get('term') ?? ''
 
     const whereClause: Prisma.ProductWhereInput = {
-         OR: [
+        OR: [
             { name: { contains: term } }, { tag: { contains: term } },
             { color: { contains: term } }, { material: { contains: term } }
         ]
@@ -47,12 +47,12 @@ export default function () {
     /*  */
     const fetch = useCallback((target: HTMLFormElement) => fetcher.submit(target), [])
     /*  */
-    return <div className="grid grid-rows-[auto,minmax(1fr, max-h-[60vh])] md:px-8 py-2 space-y-4 overflow-hidden h-full">
+    return <div className="grid grid-rows-[auto,1fr,auto] md:px-8 py-2 space-y-4">
         <Menu />
         <search className="w-11/12">
             <fetcher.Form className="w-full" aria-label='Search for a product'>
                 <label className="space-y-5">
-                    <SearchInput name={'term'} fetch={fetch} className="px=5 md:px-10 py-2 md:py-5 border-b border-b-ring text-2xl md:text-8xl font-thin bg-transparent outline-none uppercase" />
+                    <SearchInput name={'term'} fetch={fetch} autoFocus className="px=5 md:px-10 py-2 md:py-5 border-b border-b-gray-100 text-2xl md:text-8xl font-thin bg-transparent outline-none uppercase" />
                     <span className="block text-xl md:text-2xl font-light">
                         Search the product you're looking for. <br />
                         <em className="text-[1.2rem] font-extrabold text-opacity-85"><strong className="text-opacity-100">Hint:</strong> Use tag keyword also: red seat, for kids, only women, blue table, office conference table.</em>
@@ -60,30 +60,28 @@ export default function () {
                 </label>
             </fetcher.Form>
         </search>
-
-        <article className="relative">
+        <article className="relative grid grid-rows-[auto,1fr,auto]  py-2 space-y-4 ">
             {isFetching && (
                 <div className="absolute grid place-items-center inset-full top-0 right-0 bottom-0 left-0 bg-white/85 w-full h-full motion-safe:animate-pulse">
                     <ImSpinner2 className="animate-spin size-20 fill-primary" />
                 </div>
             )
             }
-            <article className="grid grid-rows-[auto,1fr,auto] md:px-8 py-2 space-y-4 overflow-y-auto max-h-[60vh]">
-                <article className="flex-1 grid grid-cols-[repeat(auto-fit,minmax(min(40rem,100%),1fr))] auto-rows-auto gap-  w-full py-10">
-                    {
-                        fetcher.data?.payload.map((product) => <SearchProduct key={product.id} {...product} />)
-                    }
-                </article>
-                {!isFetching &&
-                    <Paginator
-                        fetcher={fetcher}
-                        term={params.get('term') ?? ''}
-                        disableNext={!fetcher.data?.hasNextData}
-                        disablePrevious={!fetcher.data?.hasPreviousData}
-                        nextAriaLabel="Read next paginated products"
-                        previousAriaLabel="Read the previous paginated products." />
+            <article className="flex-1 grid grid-cols-[repeat(auto-fit,minmax(min(40rem,100%),1fr))] auto-rows-auto gap-2 w-full py-10">
+                {
+                    fetcher.data?.payload.map((product) => <Product key={product.id} product={product} size="small" />)
                 }
             </article>
         </article>
+        {!isFetching && fetcher.data &&
+            <Paginator
+                fetcher={fetcher}
+                page={fetcher.data?.page ?? 1}
+                term={params.get('term') ?? ''}
+                disableNext={!fetcher.data?.hasNextData}
+                disablePrevious={!fetcher.data?.hasPreviousData}
+                nextAriaLabel="Read next paginated products"
+                previousAriaLabel="Read the previous paginated products." />
+        }
     </div>
 }

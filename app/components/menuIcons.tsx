@@ -24,7 +24,7 @@ export function LivingRoomIcon() {
                     id="g10">
                     <g
                         id="g12"
-                        clip-path="url(#clipPath16)">
+                        clipPath="url(#clipPath16)">
                         <g
                             id="g18"
                             transform="translate(18.9336,44.6875)">
@@ -145,7 +145,7 @@ export function OfficeIcon() {
                     id="g10">
                     <g
                         id="g12"
-                        clip-path="url(#clipPath16)">
+                        clipPath="url(#clipPath16)">
                         <g
                             id="g18"
                             transform="translate(67,2)">
@@ -235,7 +235,7 @@ export function ForKidsIcon() {
                     id="g10">
                     <g
                         id="g12"
-                        clip-path="url(#clipPath16)">
+                        clipPath="url(#clipPath16)">
                         <g
                             id="g18"
                             transform="translate(2,47.5)">
@@ -375,7 +375,7 @@ export function KitchenIcon() {
                     id="g14">
                     <g
                         id="g16"
-                        clip-path="url(#clipPath20)">
+                        clipPath="url(#clipPath20)">
                         <g
                             id="g22"
                             transform="translate(4,39)">
@@ -542,7 +542,7 @@ export function AccessoriesIcon() {
                     id="g10">
                     <g
                         id="g12"
-                        clip-path="url(#clipPath16)">
+                        clipPath="url(#clipPath16)">
                         <g
                             id="g18"
                             transform="translate(2,33)">

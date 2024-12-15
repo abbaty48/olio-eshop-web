@@ -34,7 +34,7 @@ export function Menu() {
                 }
             </ul>
         </div> :
-            <button onClick={() => set(true)} aria-label="Open Menu list" className="fixed top-4 right-4 bg-white shadow-2xl p-5 rounded-full text-primary motion-duration-1000 motion-ease-in-out hover:motion-scale-out-75">
+            <button onClick={() => set(true)} aria-label="Open Menu list" className="fixed top-4 right-4 bg-white z-[1000] shadow-2xl p-5 rounded-full text-primary motion-duration-1000 motion-ease-in-out hover:motion-scale-out-75">
                 <RiMenu4Line />
             </button>
         }</>

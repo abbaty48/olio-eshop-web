@@ -597,7 +597,7 @@ Promise.all(
 ].map(product => prismaDB.product.create({
     data: {
         ...product,
-        price: Number(Math.round(Math.random() * 100.0).toFixed(2) + 5)
+        price: Number(Math.floor(Math.random() * 100) + 10)
     }
 })))
 
