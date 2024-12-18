@@ -38,10 +38,6 @@
         min-width: 320px;
     }
 
-    body {
-        @apply bg-white;
-    }
-
     h1 {
         font-size: 3.2rem;
         line-height: 1.1;

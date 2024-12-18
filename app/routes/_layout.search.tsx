@@ -9,10 +9,12 @@ import { Product } from "~/components/product";
 import { ImSpinner2 } from "react-icons/im";
 import { Menu } from "~/components/menu";
 import { Prisma } from "@prisma/client";
+import { getIdentity } from "~/modules/.servers/session/auth";
 
 const LIMIT = 4;
 
 export async function loader({ request }: LoaderFunctionArgs) {
+    const identity = await getIdentity(request)
     const query = new URL(request.url).searchParams;
     const page = Number(query.get('page') ?? 1)
     const term = query.get('term') ?? ''
@@ -24,17 +26,19 @@ export async function loader({ request }: LoaderFunctionArgs) {
         ]
     }
 
-    const [count, payload] = await prismaDB.$transaction([
+    let [count, payload] = await prismaDB.$transaction([
         prismaDB.product.count({ where: whereClause }),
         prismaDB.product.findMany({
             where: whereClause,
             skip: (page - 1) * LIMIT,
-            take: LIMIT
+            take: LIMIT,
+            include: { Cart: { where: { customerId: identity?.id }, select: { cartId: true } } }
         })
     ])
 
     const hasPreviousData = page > 1;
     const hasNextData = page < Math.ceil(count / LIMIT)
+    payload = payload.map(product => ({ ...product, cartId: product.Cart[0]?.cartId }))
     return { page, count, hasNextData, hasPreviousData, payload }
 }
 
@@ -49,10 +53,10 @@ export default function () {
     /*  */
     return <div className="grid grid-rows-[auto,1fr,auto] md:px-8 py-2 space-y-4">
         <Menu />
-        <search className="w-11/12">
-            <fetcher.Form className="w-full" aria-label='Search for a product'>
+        <search className="">
+            <fetcher.Form className="" aria-label='Search for a product'>
                 <label className="space-y-5">
-                    <SearchInput name={'term'} fetch={fetch} autoFocus className="px=5 md:px-10 py-2 md:py-5 border-b border-b-gray-100 text-2xl md:text-8xl font-thin bg-transparent outline-none uppercase" />
+                    <SearchInput name={'term'} fetch={fetch} autoFocus className=" border-b border-b-gray-100 text-2xl md:text-8xl font-thin bg-transparent outline-none uppercase" />
                     <span className="block text-xl md:text-2xl font-light">
                         Search the product you're looking for. <br />
                         <em className="text-[1.2rem] font-extrabold text-opacity-85"><strong className="text-opacity-100">Hint:</strong> Use tag keyword also: red seat, for kids, only women, blue table, office conference table.</em>
@@ -67,7 +71,7 @@ export default function () {
                 </div>
             )
             }
-            <article className="flex-1 grid grid-cols-[repeat(auto-fit,minmax(min(40rem,100%),1fr))] auto-rows-auto gap-2 w-full py-10">
+            <article className="flex-1 grid grid-cols-[repeat(auto-fit,minmax(min(40rem,100%),1fr))] auto-rows-auto gap-2  py-10">
                 {
                     fetcher.data?.payload.map((product) => <Product key={product.id} product={product} size="small" />)
                 }

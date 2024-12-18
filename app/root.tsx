@@ -7,7 +7,8 @@ import {
     ScrollRestoration,
 } from "@remix-run/react";
 import og from '/features/olios_ogimage.png'
-import type { LinksFunction, MetaFunction } from "@remix-run/node";
+import { getIdentity } from "./modules/.servers/session/auth";
+import type { LinksFunction, LoaderFunction, LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 
 export const meta: MetaFunction = () => [
     { title: 'Modern appealing ergonomic appliance for home and office..' },
@@ -32,6 +33,10 @@ export const links: LinksFunction = () => [
         href: "https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap",
     },
 ];
+export const loader: LoaderFunction = async ({ request }: LoaderFunctionArgs) => {
+    const identity = await getIdentity(request)
+    return { identity }
+}
 
 export function Layout({ children }: { children: React.ReactNode }) {
     return (
@@ -41,7 +46,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <Meta />
                 <Links />
             </head>
-            <body>
+            <body className="grid grid-cols-[minmax(3rem,_auto),_1fr] bg-gray-50 overflow-hidden max-h-screen max-w-screen-2xl mx-auto">
                 {children}
                 <ScrollRestoration />
                 <Scripts />

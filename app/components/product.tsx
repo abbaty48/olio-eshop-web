@@ -1,4 +1,4 @@
-import { TbShoppingCartPlus } from "react-icons/tb";
+import { TbShoppingCartCheck, TbShoppingCartExclamation, TbShoppingCartPlus } from "react-icons/tb";
 import { Link, useFetcher } from "@remix-run/react";
 import { TProduct } from "~/modules/types";
 
@@ -6,9 +6,12 @@ type TProps = {
     product: TProduct,
     size: 'small' | 'medium' | 'large'
 }
+
 export function Product({ product, size }: TProps) {
-    const fetcher = useFetcher()
-    const { id, name, desc, price, tag, feature } = product
+    const fetcher = useFetcher<{ success: boolean }>()
+    const { id, name, desc, price, tag, feature, cartId } = product
+    const cartProcessing = fetcher.state !== 'idle';
+    const inCart = Boolean(cartId) === true;
     /*  */
     const SmallProduct = () => <article key={id} className={'col-span-1 flex flex-col justify-between bg-white text-[1.8rem] text-paragraph font-light divide-y divide-gray-100'}>
         <Link to={`/product/${id}`} className="p-2">
@@ -23,10 +26,15 @@ export function Product({ product, size }: TProps) {
         </Link>
         <div className="flex justify-between items-center p-2">
             <p className="text-primary font-bold">{Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price)}</p>
-            <fetcher.Form title={name} role="radio">
-                {/* if added TbShoppingCartMinus */}
-                {/* if error uses  TbShoppingCartExclamation*/}
-                <button className="transition-all hover:stroke-primary hover:ring-1 hover:ring-primary p-4 hover:rounded-full" aria-label="add the product to your card/remove the product from your cart"><TbShoppingCartPlus /></button>
+            <fetcher.Form title={inCart === true ? 'Remove from your cart list.' : 'Add to your cart list.'} role="radio" method="PUT" action={`/product/${id}/${inCart === true ? 'remove4rmCart' : 'add2Cart'}`}>
+                <input type="hidden" name="cartId" value={cartId} />
+                <button disabled={cartProcessing} className="transition-all hover:stroke-primary hover:ring-1 hover:ring-primary p-4 hover:rounded-full" aria-label="add the product to your card/remove the product from your cart">
+                    {
+                        (cartProcessing) ? <TbShoppingCartExclamation /> :
+                            inCart ? <TbShoppingCartCheck className="stroke-primary" /> :
+                                <TbShoppingCartPlus />
+                    }
+                </button>
             </fetcher.Form>
         </div>
     </article >
@@ -44,10 +52,15 @@ export function Product({ product, size }: TProps) {
         </Link>
         <div className="flex justify-between items-center p-2">
             <p className="text-primary font-bold">{Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price)}</p>
-            <fetcher.Form title={name} role="radio">
-                {/* if added TbShoppingCartMinus */}
-                {/* if error uses  TbShoppingCartExclamation*/}
-                <button className="transition-all hover:stroke-primary hover:ring-1 hover:ring-primary p-4 hover:rounded-full" aria-label="add the product to your card/remove the product from your cart"><TbShoppingCartPlus /></button>
+            <fetcher.Form title={inCart === true ? 'Remove from your cart list.' : 'Add to your cart list.'} role="radio" method="PUT" action={`/product/${id}/${inCart === true ? 'remove4rmCart' : 'add2Cart'}`}>
+                <input type="hidden" name="cartId" value={cartId} />
+                <button disabled={cartProcessing} className="transition-all hover:stroke-primary hover:ring-1 hover:ring-primary p-4 hover:rounded-full" aria-label="add the product to your card/remove the product from your cart">
+                    {
+                        (cartProcessing) ? <TbShoppingCartExclamation /> :
+                            inCart ? <TbShoppingCartCheck className="stroke-primary" /> :
+                                <TbShoppingCartPlus />
+                    }
+                </button>
             </fetcher.Form>
         </div>
     </article>
@@ -67,10 +80,15 @@ export function Product({ product, size }: TProps) {
         </Link>
         <div className="col-span-3 flex  justify-between items-center p-2">
             <p className=" text-primary font-bold">{Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price)}</p>
-            <fetcher.Form title={name}>
-                {/* if added TbShoppingCartMinus */}
-                {/* if error uses  TbShoppingCartExclamation*/}
-                <button className="transition-all hover:stroke-primary hover:ring-1 hover:ring-primary p-4 hover:rounded-full" aria-label="add the product to your card/remove the product from your cart"><TbShoppingCartPlus /></button>
+            <fetcher.Form title={inCart === true ? 'Remove from your cart list.' : 'Add to your cart list.'} role="radio" method="PUT" action={`/product/${id}/${inCart === true ? 'remove4rmCart' : 'add2Cart'}`}>
+                <input type="hidden" name="cartId" value={cartId} />
+                <button disabled={cartProcessing} className="transition-all hover:stroke-primary hover:ring-1 hover:ring-primary p-4 hover:rounded-full" aria-label="add the product to your card/remove the product from your cart">
+                    {
+                        (cartProcessing) ? <TbShoppingCartExclamation /> :
+                            inCart ? <TbShoppingCartCheck className="stroke-primary" /> :
+                                <TbShoppingCartPlus />
+                    }
+                </button>
             </fetcher.Form>
         </div>
     </article>
@@ -82,20 +100,4 @@ export function Product({ product, size }: TProps) {
             case 'large': return <LargeProduct />
         }
     })()
-}
-
-export function SearchProduct({ id, name, desc, price, feature }: TProduct) {
-    return <article>
-        <figure className="inline-flex flex-wrap items-center gap-5 py-6 px-4 hover:bg-white">
-            <div className="flex flex-wrap items-center gap-5">
-                <img src={`/features/${feature}`} alt={desc || name} className="w-[100px] h-[100px] md:w-[200px] md:h-[200px]" width={200} height={200} />
-                <span className="text-primary font-light text-xl md:text-[5rem]">
-                    {Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price)} </span>
-            </div>
-            <figcaption className="flex flex-wrap justify-between font-light text-xl md:text-[5rem] uppercase leading-[70px] break-words text-wrap whitespace-break-spaces">{name} </figcaption>
-        </figure>
-        <Link key={id} to={`/products/${id}`}>
-        </Link>
-
-    </article>
 }

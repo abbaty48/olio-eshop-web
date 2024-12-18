@@ -1,4 +1,7 @@
+import { Customer, Profile } from "@prisma/client";
+
 export type TProduct = {
+    [x: string]: any;
     id: string;
     sku: string;
     name: string;
@@ -9,6 +12,7 @@ export type TProduct = {
     color: string;
     material: string;
     category: string;
+    cartId?: string;
 }
 
 export type TCart = {
@@ -28,3 +32,5 @@ export type TFetcher<T> = {
     hasNextData: boolean,
     hasPreviousData: boolean,
 }
+
+export type Identity = Customer & Profile

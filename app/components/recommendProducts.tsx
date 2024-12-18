@@ -1,26 +1,44 @@
+import { TbShoppingCartOff, TbShoppingCartPlus } from "react-icons/tb"
 import { Link, useFetcher } from "@remix-run/react"
-import { IoAddCircle } from "react-icons/io5"
 import { TProduct } from "~/modules/types"
+
+function RProduct({ id, name, price, feature, desc, tag, cartId }: TProduct) {
+    const fetcher = useFetcher()
+    const inCart = Boolean(cartId) === true
+    const cartProcessing = fetcher.state !== 'idle'
+    const title = (inCart ? 'Remove' : 'Add') + ' the product to your carts list.'
+
+    return (
+        <article key={id} className='grid grid-rows-subgrid row-span-4 px-2 py-4'>
+            <Link to={`/product/${id}`} className="grid grid-rows-subgrid row-span-3">
+                <figure className='grid grid-rows-subgrid row-span-3  space-y-6'>
+                    <img src={`/features/${feature}`} alt={desc ?? tag} className='row-start-1 row-end-2 place-self-center' width={200} height={200} />
+                    <p className='row-start-2 row-end-3 text-base'>{name}</p>
+                    <p className='row-start-3 row-end-4 text-[1.5rem] text-orange-500'>{Intl.NumberFormat('en-US', { currency: 'USD', style: 'currency' }).format(price)}</p>
+                </figure>
+            </Link>
+            <fetcher.Form method="PUT" preventScrollReset
+                action={`/product/${id}/${inCart ? 'remove4rmCart' : 'add2Cart'}`}
+                className='row-start-4 row-end-5 flex items-center justify-end'>
+                <input type="hidden" name="cartId" value={cartId} />
+                <button title={title} aria-label={title} disabled={cartProcessing} className='disabled:pointer-events-none disabled:bg-opacity-95 hover:motion-preset-pulse-sm active:motion-preset-compress'>
+                    {
+                        ((inCart) || (inCart && cartProcessing)) ?
+                            <TbShoppingCartOff className="stroke-primary" /> :
+                            ((!inCart) || (!inCart && cartProcessing)) &&
+                            <TbShoppingCartPlus />
+                    }
+                </button>
+            </fetcher.Form>
+        </article>
+    )
+}
 
 type TProps = { products: TProduct[] }
 export function RecommendProducts({ products }: TProps) {
-    const fetcher = useFetcher()
     return (
         <article className="grid grid-flow-col auto-cols-[25rem] grid-rows-[1fr,auto,auto,50px] bg-white min-w-80 md:max-h-[60vh] overflow-x-auto divide-x divide-ring/20">
-            {products?.map(({ id, name, feature, tag, desc, price }) => (
-                <article key={id} className='grid grid-rows-subgrid row-span-4 px-2 py-4'>
-                    <Link to={`/product/${id}`} className="grid grid-rows-subgrid row-span-3">
-                        <figure className='grid grid-rows-subgrid row-span-3  space-y-6'>
-                            <img src={`/features/${feature}`} alt={desc ?? tag} className='row-start-1 row-end-2 place-self-center' width={200} height={200} />
-                            <p className='row-start-2 row-end-3 text-base'>{name}</p>
-                            <p className='row-start-3 row-end-4 text-[1.5rem] text-orange-500'>{Intl.NumberFormat('en-US', { currency: 'USD', style: 'currency' }).format(price)}</p>
-                        </figure>
-                    </Link>
-                    <fetcher.Form className='row-start-4 row-end-5 flex items-center justify-end'>
-                        <button aria-label="Add the product to your carts list." className='hover:motion-preset-pulse-sm active:motion-preset-compress'><IoAddCircle /></button>
-                    </fetcher.Form>
-                </article>
-            ))}
+            {products?.map(product => <RProduct {...product} />)}
         </article>
     )
 }

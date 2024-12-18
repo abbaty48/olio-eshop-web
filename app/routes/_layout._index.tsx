@@ -15,7 +15,7 @@ function MotionSlider() {
     const [feature, set] = useState(() => slideIMGs[0])
     const slideAt = useCallback((index = 0) => set(slideIMGs[index]), [])
     return <div className={`w-full h-full`}>
-        <img src={`public/features/${feature}`} role="presentation" alt="" />
+        <img src={`/features/${feature}`} role="presentation" alt="" />
         <ul className="absolute bottom-10 right-20 flex gap-4 group"> {
             slideIMGs.map((slide, index) => (
                 <li key={index} onClick={() => slideAt(index)} className={clsx(

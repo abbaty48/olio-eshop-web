@@ -1,4 +1,5 @@
-import { Outlet, useFetcher, useLocation } from "@remix-run/react";
+import { getIdentity } from "~/modules/.servers/session/auth";
+import { useFetcher, useLocation } from "@remix-run/react";
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { prismaDB } from "~/modules/.servers/db.server";
 import { useEffect, useMemo, useState } from "react";
@@ -11,19 +12,22 @@ import { ImSpinner2 } from "react-icons/im";
 
 const LIMIT = 5;
 export async function loader({ request }: LoaderFunctionArgs) {
+    const identity = await getIdentity(request)
     const page = Number(new URL(request.url).searchParams.get('page') ?? 1)
-    const [count, payload] = await prismaDB.$transaction(
+    let [count, payload] = await prismaDB.$transaction(
         [
             prismaDB.product.count(),
             prismaDB.product.findMany({
                 skip: (page - 1) * LIMIT,
                 take: LIMIT,
-                orderBy: { createdAt: 'asc' }
+                orderBy: { createdAt: 'asc' },
+                include: { Cart: { where: { customerId: identity?.id }, select: { cartId: true } } }
             })
         ]
     )
     const hasPreviousData = page > 1;
     const hasNextData = page < Math.ceil(count / LIMIT)
+    payload = payload.map(product => ({ ...product, cartId: product.Cart[0]?.cartId }))
     return { page, count, hasPreviousData, hasNextData, payload }
 }
 
