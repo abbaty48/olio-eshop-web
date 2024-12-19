@@ -16,20 +16,18 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     const identity = await getIdentity(request)
 
     const product = await prismaDB.product.findUnique({ where: { id: params.id }, include: { Cart: { where: { customerId: identity?.id }, select: { cartId: true, quantity: true, subPrice: true } } } })
-    const recommendedProducts = new Promise<TProduct[]>(resolve => setTimeout(() => {
-        return resolve(prismaDB.product.findMany({
-            take: 10,
-            where: {
-                OR: [
-                    { name: { contains: product?.name } },
-                    { tag: { contains: product?.tag } },
-                    { color: { contains: product?.color } },
-                    { material: { contains: product?.material } }
-                ],
-            },
-            include: { Cart: { where: { customerId: identity?.id }, select: { cartId: true } } }
-        }))
-    }, 3000))
+    const recommendedProducts = new Promise<TProduct[]>(resolve => resolve(prismaDB.product.findMany({
+        take: 10,
+        where: {
+            OR: [
+                { name: { contains: product?.name } },
+                { tag: { contains: product?.tag } },
+                { color: { contains: product?.color } },
+                { material: { contains: product?.material } }
+            ],
+        },
+        include: { Cart: { where: { customerId: identity?.id }, select: { cartId: true } } }
+    })))
     return { product, recommendedProducts }
 }
 

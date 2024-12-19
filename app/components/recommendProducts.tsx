@@ -1,6 +1,7 @@
 import { TbShoppingCartOff, TbShoppingCartPlus } from "react-icons/tb"
 import { Link, useFetcher } from "@remix-run/react"
 import { TProduct } from "~/modules/types"
+import { memo } from "react"
 
 function RProduct({ id, name, price, feature, desc, tag, cartId }: TProduct) {
     const fetcher = useFetcher()
@@ -35,15 +36,15 @@ function RProduct({ id, name, price, feature, desc, tag, cartId }: TProduct) {
 }
 
 type TProps = { products: TProduct[] }
-export function RecommendProducts({ products }: TProps) {
+export const RecommendProducts = memo(({ products }: TProps) => {
     return (
         <article className="grid grid-flow-col auto-cols-[25rem] grid-rows-[1fr,auto,auto,50px] bg-white min-w-80 md:max-h-[60vh] overflow-x-auto divide-x divide-ring/20">
-            {products?.map(product => <RProduct {...product} />)}
+            {products?.map(product => <RProduct key={product.id} {...product} />)}
         </article>
     )
-}
+})
 
-export function SkeletonRecommendProducts() {
+export const SkeletonRecommendProducts = memo(() => {
     return (
         <article className='flex gap-5 bg-white md:max-h-[60vh] overflow-x-auto p-4 divide-x divide-ring/20 w-screen'>
             {Array.from({ length: 10 }).map((_, _i) => <div key={_i} className='flex-1 flex flex-wrap gap-3 items-center bg-gray-50'>
@@ -58,4 +59,4 @@ export function SkeletonRecommendProducts() {
             </div>)}
         </article>
     )
-}
+})
