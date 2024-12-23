@@ -1,4 +1,6 @@
+import { RecommendProducts } from "~/components/recommendProducts";
 import { useFetcher, useSearchParams } from "@remix-run/react";
+import { getIdentity } from "~/modules/.servers/session/auth";
 import { SearchInput } from "~/components/searchInput";
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { prismaDB } from "~/modules/.servers/db.server";
@@ -9,7 +11,6 @@ import { Product } from "~/components/product";
 import { ImSpinner2 } from "react-icons/im";
 import { Menu } from "~/components/menu";
 import { Prisma } from "@prisma/client";
-import { getIdentity } from "~/modules/.servers/session/auth";
 
 const LIMIT = 4;
 
@@ -36,16 +37,20 @@ export async function loader({ request }: LoaderFunctionArgs) {
         })
     ])
 
+    const recommendedProducts = payload.length === 0 && Promise.resolve(prismaDB.product.findMany({ take: 10, orderBy: { createdAt: 'desc' }, include: { Cart: { where: { customerId: identity?.id }, select: { cartId: true } } } }))
+
     const hasPreviousData = page > 1;
     const hasNextData = page < Math.ceil(count / LIMIT)
     payload = payload.map(product => ({ ...product, cartId: product.Cart[0]?.cartId }))
-    return { page, count, hasNextData, hasPreviousData, payload }
+    return { page, count, hasNextData, hasPreviousData, payload, recommendedProducts }
 }
 
 export default function () {
     const [params] = useSearchParams()
     const fetcher = useFetcher<TFetcher<TProduct[]>>()
     const [isFetching, set] = useState(fetcher.state !== 'idle')
+    const term = useSearchParams()[0].get('term') ?? 'product'
+
     /*  */
     useEffect(() => void set(fetcher.state !== 'idle'), [fetcher.state])
     /*  */
@@ -53,8 +58,8 @@ export default function () {
     /*  */
     return <div className="grid grid-rows-[auto,1fr,auto] md:px-8 py-2 space-y-4">
         <Menu />
-        <search className="">
-            <fetcher.Form className="" aria-label='Search for a product'>
+        <search>
+            <fetcher.Form aria-label='Search for a product.'>
                 <label className="space-y-5">
                     <SearchInput name={'term'} fetch={fetch} autoFocus className=" border-b border-b-gray-100 text-2xl md:text-8xl font-thin bg-transparent outline-none uppercase" />
                     <span className="block text-xl md:text-2xl font-light">
@@ -64,28 +69,35 @@ export default function () {
                 </label>
             </fetcher.Form>
         </search>
-        <article className="relative grid grid-rows-[auto,1fr,auto]  py-2 space-y-4 ">
+        <article className="relative py-2 space-y-4 ">
             {isFetching && (
                 <div className="absolute grid place-items-center inset-full top-0 right-0 bottom-0 left-0 bg-white/85 w-full h-full motion-safe:animate-pulse">
                     <ImSpinner2 className="animate-spin size-20 fill-primary" />
                 </div>
-            )
+            )}
+            {fetcher.data && fetcher.data.payload.length ?
+                <>
+                    <article className="flex-1 grid grid-cols-[repeat(auto-fit,minmax(min(40rem,100%),1fr))] auto-rows-auto gap-2  py-10">
+                        {fetcher.data.payload.map((product) => <Product key={product.id} product={product} size="small" />)}
+                    </article> :
+                    {!isFetching &&
+                        <Paginator
+                            fetcher={fetcher}
+                            page={fetcher.data?.page ?? 1}
+                            term={params.get('term') ?? ''}
+                            disableNext={!fetcher.data?.hasNextData}
+                            disablePrevious={!fetcher.data?.hasPreviousData}
+                            nextAriaLabel="Read next paginated products"
+                            previousAriaLabel="Read the previous paginated products." />
+                    }
+                </> :
+                <>
+                    <p className="my-5 font-bold text-lg">Search for '{term}' not found.</p>
+                    {
+                        fetcher.data?.recommendedProducts ? <RecommendProducts products={fetcher.data?.recommendedProducts ?? Promise.resolve([])} /> : null
+                    }
+                </>
             }
-            <article className="flex-1 grid grid-cols-[repeat(auto-fit,minmax(min(40rem,100%),1fr))] auto-rows-auto gap-2  py-10">
-                {
-                    fetcher.data?.payload.map((product) => <Product key={product.id} product={product} size="small" />)
-                }
-            </article>
         </article>
-        {!isFetching && fetcher.data &&
-            <Paginator
-                fetcher={fetcher}
-                page={fetcher.data?.page ?? 1}
-                term={params.get('term') ?? ''}
-                disableNext={!fetcher.data?.hasNextData}
-                disablePrevious={!fetcher.data?.hasPreviousData}
-                nextAriaLabel="Read next paginated products"
-                previousAriaLabel="Read the previous paginated products." />
-        }
     </div>
 }

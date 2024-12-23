@@ -1,4 +1,4 @@
-import { FetcherWithComponents, useLocation } from "@remix-run/react";
+import { FetcherWithComponents, useLocation, useNavigate } from "@remix-run/react";
 import { memo, useCallback, useState } from "react";
 import { HiChevronLeft } from "react-icons/hi";
 
@@ -18,7 +18,7 @@ export const Paginator = memo(function Paginator({ fetcher, page, term, nextAria
 
     const loadMore = useCallback((page: number) => {
         set(page);
-        fetcher.load(path, {flushSync: false})
+        fetcher.load(path, { flushSync: true })
     }, [page, path])
 
     return (<fetcher.Form className='flex my-10' aria-label={'Paginated data'}>

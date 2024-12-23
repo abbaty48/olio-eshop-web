@@ -1,115 +1,84 @@
-import { HiChevronLeft, HiOutlineRefresh } from "react-icons/hi";
-import { TbBasketCancel, TbBasketCheck } from "react-icons/tb";
-import { IoAddCircle, IoRemoveOutline } from "react-icons/io5";
-import { MdRemoveShoppingCart } from "react-icons/md";
-import { products } from "~/modules/mocks/products";
-import { TCart, TProduct } from "~/modules/types";
+import { RecommendProducts } from "~/components/recommendProducts";
+import { CartSkeleton, Cart as ShoppingCart } from "~/components/cart";
+import { TFetcher, TShoppingCart } from "~/modules/types";
+import { Link, useFetcher } from "@remix-run/react";
+export { loader } from "~/modules/.servers/cart.crud";
 import PageTitle from "~/components/pageTitle";
-import { useFetcher } from "@remix-run/react";
-import { carts } from "~/modules/mocks/cart";
-import { CiImageOff } from "react-icons/ci";
-
-export function Cart({ cartId, productId, subPrice, quantity, addedOn, product }: TCart) {
-    const fetcher = useFetcher()
-    return (
-        <article key={cartId} className='bg-white md:max-h-[60vh] p-4'>
-            {product ? (
-                <div className='space-y-2'>
-                    <div className="flex items-center gap-2 justify-between">
-                        <button aria-label={'Check / Uncheck the checkout item from the list.'}>
-                            <TbBasketCheck />
-                            {/* <TbBasketCancel /> */}
-                        </button>
-                        <p className='text-sm text-right'>Added On: {Intl.DateTimeFormat('en-US', { dateStyle: 'full' }).format(new Date(addedOn))}</p>
-                    </div>
-                    <article className='flex flex-wrap flex-col justify-between'>
-                        <figure className='flex-1 flex flex-wrap gap-3 items-center'>
-                            <img src={`/features/${product.feature}`} alt={product.desc ?? product.tag}
-                                className='w-[200px] h-[200px]' width={100} height={100} />
-                            <figcaption>
-                                <dl className='space-y-4'>
-                                    <dt className='text-xl'> <sup>({quantity})</sup> {product.name} </dt>
-                                    <dd className='text-primary text-3xl text-right font-thin'>{Intl.NumberFormat('en-US', { currency: 'USD', style: 'currency' }).format(subPrice)}
-                                        <p className='relative top-1 text-[2rem] text-[#c25600]'><sub><strong>unit {Intl.NumberFormat('en-US', { currency: 'USD', style: 'currency' }).format(product.price)}</strong> </sub></p>
-                                    </dd>
-                                </dl>
-                            </figcaption>
-                        </figure>
-                        <fetcher.Form className='flex items-center justify-end gap-2 p-2'>
-                            <button aria-label="Increase the checkout item quantity by 1." className='hover:motion-preset-pulse-sm active:motion-preset-compress'><IoAddCircle /></button>
-                            <button aria-label="Decrease the checkout item quantity by 1." className='hover:motion-preset-pulse-sm active:motion-preset-compress'><IoRemoveOutline /></button>
-                            <button aria-label="Remove the checkout item form the list." className='hover:motion-preset-pulse-sm active:motion-preset-compress'><MdRemoveShoppingCart /></button>
-                        </fetcher.Form>
-                    </article>
-                </div>
-            ) : (
-                <div className='space-y-2'>
-                    <p className='text-sm text-right'>Added On: {Intl.DateTimeFormat('en-US', { dateStyle: 'full' }).format(new Date(addedOn))}</p>
-                    <div className='flex flex-wrap items-center gap-5'>
-                        <div className='w-[100px] h-[100px] bg-gray-50 grid place-items-center'><CiImageOff /> </div>
-                        <p className='font-thin text-2xl text-primary'>
-                            Product not available. <br />
-                            <small className='text-xs font-extrabold text-orange-400'>The product associated with this cart is currently not available in the store.</small>
-                        </p>
-                    </div>
-                    <fetcher.Form className='flex items-center justify-end gap-2 p-2'>
-                        <button aria-label="From the checkout item from the list." className='hover:motion-preset-pulse-sm active:motion-preset-compress'><MdRemoveShoppingCart /></button>
-                    </fetcher.Form>
-                </div>
-            )
-            }
-        </article >
-    )
-}
-
-export function RecommendProduct({ id, name, feature, tag, desc, price }: TProduct) {
-    const fetcher = useFetcher()
-    // TIPS: the recommended products should not be in the user's carts list
-    return (
-        <article key={id} className='bg-white min-w-80 md:max-h-[60vh] p-4 space-y-2'>
-            <figure className='flex-1 flex flex-wrap gap-3 items-center'>
-                <img src={`/features/${feature}`} alt={desc ?? tag} className='w-[200px] h-[200px]' width={100} height={100} />
-                <figcaption className="space-y-2 w-full">
-                    <p className='text-base'>{name}</p>
-                    <p className='text-[2rem] text-orange-500'>{Intl.NumberFormat('en-US', { currency: 'USD', style: 'currency' }).format(price)}</p>
-                    <fetcher.Form className='flex items-center justify-end w-full'>
-                        <button aria-label="Add the product to your carts list." className='hover:motion-preset-pulse-sm active:motion-preset-compress'><IoAddCircle /></button>
-                    </fetcher.Form>
-                </figcaption>
-            </figure>
-        </article >
-    )
-}
+import { useEffect, useState } from "react";
+import { Paginator } from "~/components/paginator";
 
 export default function () {
+    const fetcher = useFetcher<TFetcher<TShoppingCart>>()
+    const [isFetching, setIsFetching] = useState(true)
+    /* Load data initially */
+    useEffect(() => void fetcher.load(location.pathname), [])
+    /* Fetching state */
+    useEffect(() => void setIsFetching(fetcher.state !== 'idle'), [fetcher.state])
     return (<article className="md:px-8 px-2 py-8 space-y-5">
         <PageTitle title={'Checkouts'} />
-        {/* carts */}
+        {/* Checkout Carts */}
         <article className="md:grid md:grid-cols-[minmax(30em,1fr),30em] gap-3 space-y-5 md:space-y-0">
             <article className="space-y-5">
-                <section className="divide-y divide-ring" aria-label="Checkout list section.">
-                    {carts.map(cart => <Cart {...cart} />)}
-                </section>
-                {/* cart pagination */}
-                <div className='flex'>
-                    <button aria-label="Load the previous paginated checkouts list." className="hover:motion-preset-pulse-sm active:motion-preset-compress disabled:pointer-events-none disabled:opacity-30 p-2 md:p-4">
-                        <HiChevronLeft /></button>
-                    <button aria-label="Load the previous next checkouts list." className="hover:motion-preset-pulse-sm active:motion-preset-compress disabled:pointer-events-none disabled:opacity-30 p-2 md:p-4 bg-white text-2xl font-thin flex gap-3 items-center border-none"><HiOutlineRefresh className='animate-spin' /> Load More
-                    </button>
-                </div>
+                {isFetching && <CartSkeleton count={fetcher.data?.count || 5} />}
+                {
+                    fetcher.data && fetcher.data.count ? (
+                        <>
+                            {!isFetching && (
+                                <Paginator
+                                    fetcher={fetcher}
+                                    page={fetcher.data.page}
+                                    disableNext={!fetcher.data.hasNextData}
+                                    disablePrevious={!fetcher.data.hasPreviousData}
+                                    nextAriaLabel="Get the next checkout list."
+                                    previousAriaLabel="Get the previous checkout list." />
+                            )}
+                            <section className="divide-y divide-ring" aria-label="Checkout list section.">
+                                {fetcher.data.payload.carts.map(cart => <ShoppingCart key={cart.cartId}
+                                    isCheckout isSelected={cart.selected} cart={cart} />)}
+                            </section>
+                            {!isFetching && (
+                                <Paginator
+                                    fetcher={fetcher}
+                                    page={fetcher.data.page}
+                                    disableNext={!fetcher.data.hasNextData}
+                                    disablePrevious={!fetcher.data.hasPreviousData}
+                                    nextAriaLabel="Get the next checkout list."
+                                    previousAriaLabel="Get the previous checkout list." />
+                            )}
+                        </>
+                    ) : fetcher.data?.count === 0 && (
+                        <article className='p-10 space-y-10'>
+                            <p className='text-xl'>O0H!!, it seems like you haven't add any product to your cart wishlist, please route through the <Link to={'/products'}>products</Link> page or <Link to={'/search'}>Search</Link> for a product, then click on the cart button at the bottom below, to add any product to your cart wishlist. </p>
+                        </article>
+                    )
+                }
+                {/* pagination */}
             </article>
             <section className="bg-white" aria-label="Checkout summary section.">
-                <p>use the stripe checkout payment ui here and remove this.</p>
+                <dl className="py-4 px-2 space-y-2 border-b border-ring">
+                    <dt className="border-b border-ring font-bold text-lg">SUMMARY </dt>
+                    <dd className="space-y-2">
+                        <p>Total Items: <strong>{isFetching ? 'Summarizing...' :
+                            fetcher.data?.payload.totalInCheckouts ?? 0}</strong></p>
+                        <p>Total Quantities: <strong>{isFetching ? 'Summarizing...' :
+                            fetcher.data?.payload.totalQuantityInCheckouts ?? 0}</strong></p>
+                        <p className="w-full">
+                            {isFetching ? <strong>Summarizing...</strong> :
+                                <>
+                                    <strong className="text-2xl text-primary font-bold text-right">
+                                        {Intl.NumberFormat('en-US', { currency: 'USD', style: 'currency', maximumFractionDigits: 0 }).format(fetcher.data?.payload.totalPriceInCheckouts ?? 0)}
+                                    </strong>
+                                </>
+                            }
+                        </p>
+                    </dd>
+                </dl>
+                {/* <p>use the stripe checkout payment ui here and remove this.</p> */}
             </section>
         </article>
-        <section className="bg-white p-2 space-y-3" aria-label="Products recommendation section">
-            <h2 className="text-2xl font-thin">Recommendations</h2>
-            {/*  **use defer technic here to deferred this recommendation section */}
-            <article className="flex overflow-x-auto divide-x divide-ring/20">
-                {products.map(product => <RecommendProduct {...product} />)}
-            </article>
-        </section>
         {/* Product Recommendations */}
+        {fetcher.data && fetcher.data.recommendedProducts &&
+            (<RecommendProducts products={fetcher.data.recommendedProducts} />)}
     </article>
     )
 }

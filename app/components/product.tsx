@@ -13,6 +13,9 @@ export function Product({ product, size }: TProps) {
     const cartProcessing = fetcher.state !== 'idle';
     const inCart = Boolean(cartId) === true;
     /*  */
+    const addAction = `/carts/add/1/${price}/${id}`
+    const removeAction = `/carts/remove/${cartId}`
+    /*  */
     const SmallProduct = () => <article key={id} className={'col-span-1 flex flex-col justify-between bg-white text-[1.8rem] text-paragraph font-light divide-y divide-gray-100'}>
         <Link to={`/product/${id}`} className="p-2">
             <figure className="flex-1 flex flex-col gap-5">
@@ -26,8 +29,7 @@ export function Product({ product, size }: TProps) {
         </Link>
         <div className="flex justify-between items-center p-2">
             <p className="text-primary font-bold">{Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price)}</p>
-            <fetcher.Form title={inCart === true ? 'Remove from your cart list.' : 'Add to your cart list.'} role="radio" method="PUT" action={`/product/${id}/${inCart === true ? 'remove4rmCart' : 'add2Cart'}`}>
-                <input type="hidden" name="cartId" value={cartId} />
+            <fetcher.Form title={inCart === true ? 'Remove from your cart list.' : 'Add to your cart list.'} role="radio" method="PUT" action={inCart ? removeAction : addAction}>
                 <button disabled={cartProcessing} className="transition-all hover:stroke-primary hover:ring-1 hover:ring-primary p-4 hover:rounded-full" aria-label="add the product to your card/remove the product from your cart">
                     {
                         (cartProcessing) ? <TbShoppingCartExclamation /> :
@@ -52,8 +54,7 @@ export function Product({ product, size }: TProps) {
         </Link>
         <div className="flex justify-between items-center p-2">
             <p className="text-primary font-bold">{Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price)}</p>
-            <fetcher.Form title={inCart === true ? 'Remove from your cart list.' : 'Add to your cart list.'} role="radio" method="PUT" action={`/product/${id}/${inCart === true ? 'remove4rmCart' : 'add2Cart'}`}>
-                <input type="hidden" name="cartId" value={cartId} />
+            <fetcher.Form title={inCart === true ? 'Remove from your cart list.' : 'Add to your cart list.'} role="radio" method="PUT" action={inCart ? removeAction : addAction}>
                 <button disabled={cartProcessing} className="transition-all hover:stroke-primary hover:ring-1 hover:ring-primary p-4 hover:rounded-full" aria-label="add the product to your card/remove the product from your cart">
                     {
                         (cartProcessing) ? <TbShoppingCartExclamation /> :
@@ -80,8 +81,8 @@ export function Product({ product, size }: TProps) {
         </Link>
         <div className="col-span-3 flex  justify-between items-center p-2">
             <p className=" text-primary font-bold">{Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price)}</p>
-            <fetcher.Form title={inCart === true ? 'Remove from your cart list.' : 'Add to your cart list.'} role="radio" method="PUT" action={`/product/${id}/${inCart === true ? 'remove4rmCart' : 'add2Cart'}`}>
-                <input type="hidden" name="cartId" value={cartId} />
+            <fetcher.Form title={inCart === true ? 'Remove from your cart list.' : 'Add to your cart list.'} role="radio" method="PUT" action={inCart ? removeAction : addAction}
+            >
                 <button disabled={cartProcessing} className="transition-all hover:stroke-primary hover:ring-1 hover:ring-primary p-4 hover:rounded-full" aria-label="add the product to your card/remove the product from your cart">
                     {
                         (cartProcessing) ? <TbShoppingCartExclamation /> :

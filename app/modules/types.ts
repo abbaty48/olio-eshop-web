@@ -21,7 +21,7 @@ export type TCart = {
     quantity: number;
     subPrice: number;
     addedOn: Date;
-    product?: TProduct;
+    product?: TProduct | null;
     updatedOn: Date
 }
 
@@ -31,6 +31,19 @@ export type TFetcher<T> = {
     count: number,
     hasNextData: boolean,
     hasPreviousData: boolean,
+    recommendedProducts?: Promise<TProduct[]>
+}
+
+export type TCheckoutCart = TCart & { selected: boolean }
+
+export type TShoppingCart = {
+    carts: TCheckoutCart[],
+    totalInCarts: number,
+    totalPriceInCarts: number,
+    totalQuantityInCarts: number,
+    totalInCheckouts: number,
+    totalPriceInCheckouts: number,
+    totalQuantityInCheckouts: number,
 }
 
 export type Identity = Customer & Profile
