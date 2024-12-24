@@ -1,11 +1,40 @@
-import { RecommendProducts } from "~/components/recommendProducts";
+import { RecommendProducts, SkeletonRecommendProducts } from "~/components/recommendProducts";
 import { CartSkeleton, Cart as ShoppingCart } from "~/components/cart";
+import { Link, Outlet, useFetcher } from "@remix-run/react";
 import { TFetcher, TShoppingCart } from "~/modules/types";
-import { Link, useFetcher } from "@remix-run/react";
 export { loader } from "~/modules/.servers/cart.crud";
+import { Paginator } from "~/components/paginator";
 import PageTitle from "~/components/pageTitle";
 import { useEffect, useState } from "react";
-import { Paginator } from "~/components/paginator";
+
+export function ErrorBoundary() {
+    return (<article className="md:px-8 px-2 py-8 space-y-5">
+        <PageTitle title={'Checkouts'} />
+        <p className="px-4 py-3 bg-red-100 text-base">There was an error on the page, please ensure you have a good network connectivity and try reload this page</p>
+        {/* Checkout Carts */}
+        <article className="md:grid md:grid-cols-[minmax(30em,1fr),30em] gap-3 space-y-5 md:space-y-0">
+            <article className="space-y-5">
+                <CartSkeleton />
+            </article>
+            <section className="flex flex-col  bg-white" aria-label="Checkout summary section.">
+                <dl className="py-4 px-2 space-y-2 border-b border-ring">
+                    <dt className="border-b border-ring font-bold text-lg">SUMMARY </dt>
+                    <dd className="space-y-2">
+                        <p>Total Items: <strong>'Summarizing...'</strong></p>
+                        <p>Total Quantities: <strong>'Summarizing...'</strong></p>
+                        <p><strong>Summarizing...</strong></p>
+                    </dd>
+                </dl>
+                <p className="my-4 p-3 text-center text-xl">
+                    Oops, something went wrong here, a payment form should've shown here, but
+                    there must be a network error occur, please try reload the page, sorry
+                    for the inconvenience.
+                </p>
+            </section>
+        </article>
+        {<SkeletonRecommendProducts />}
+    </article>)
+}
 
 export default function () {
     const fetcher = useFetcher<TFetcher<TShoppingCart>>()
@@ -16,7 +45,6 @@ export default function () {
     useEffect(() => void setIsFetching(fetcher.state !== 'idle'), [fetcher.state])
     return (<article className="md:px-8 px-2 py-8 space-y-5">
         <PageTitle title={'Checkouts'} />
-        {/* Checkout Carts */}
         <article className="md:grid md:grid-cols-[minmax(30em,1fr),30em] gap-3 space-y-5 md:space-y-0">
             <article className="space-y-5">
                 {isFetching && <CartSkeleton count={fetcher.data?.count || 5} />}
@@ -54,7 +82,7 @@ export default function () {
                 }
                 {/* pagination */}
             </article>
-            <section className="bg-white" aria-label="Checkout summary section.">
+            <section className="flex flex-col justify-between bg-white" aria-label="Checkout summary section.">
                 <dl className="py-4 px-2 space-y-2 border-b border-ring">
                     <dt className="border-b border-ring font-bold text-lg">SUMMARY </dt>
                     <dd className="space-y-2">
@@ -73,7 +101,7 @@ export default function () {
                         </p>
                     </dd>
                 </dl>
-                {/* <p>use the stripe checkout payment ui here and remove this.</p> */}
+                <div className="flex-1 p-4"><Outlet /></div>
             </section>
         </article>
         {/* Product Recommendations */}

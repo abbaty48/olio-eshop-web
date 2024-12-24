@@ -23,6 +23,7 @@ export type TCart = {
     addedOn: Date;
     product?: TProduct | null;
     updatedOn: Date
+    [key: string]: any
 }
 
 export type TFetcher<T> = {
