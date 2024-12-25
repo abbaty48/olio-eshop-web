@@ -31,7 +31,7 @@ export default function () {
                         }
                         <li>
                             <Form action={isAuthenticated ? "/auth/logout" : "/auth/login"} method="post">
-                                <button type="submit">
+                                <button type="submit" aria-label={isAuthenticated ? 'Logout from the website.' : 'Login to the website.'}>
                                     {
                                         isAuthenticated ? <RiLogoutBoxLine className="md:size-8 hover:text-primary hover:cursor-pointer" /> :
                                             <RiLoginBoxLine className="md:size-8 hover:text-primary hover:cursor-pointer" />

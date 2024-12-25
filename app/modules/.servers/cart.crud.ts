@@ -19,7 +19,7 @@ const LIMIT = 2;
 /* LOADER */
 function loaderHelper(identityId: string, page: number, count: number, payload: TShoppingCart) {
     // recommended products
-    const recommendedProducts = Promise.resolve(prismaDB.product.findMany({ take: 10, orderBy: { createdAt: 'desc' }, include: { Cart: { where: { customerId: identityId }, select: { cartId: true } } } }))
+    const recommendedProducts = Promise.resolve(prismaDB.product.findMany({ take: 10, orderBy: { createdAt: 'desc' }, include: { Cart: { where: { customerId: { equals: identityId } }, select: { cartId: true } } } }))
 
     const hasPreviousData = page > 1;
     const hasNextData = page < Math.ceil(count / LIMIT)

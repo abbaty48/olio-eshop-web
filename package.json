@@ -29,8 +29,7 @@
         "remix-auth": "^3.7.0",
         "remix-auth-auth0": "^1.10.0",
         "stripe": "^17.5.0",
-        "tailwindcss-motion": "^0.4.3-beta",
-        "zod": "^3.23.8"
+        "tailwindcss-motion": "^0.4.3-beta"
     },
     "devDependencies": {
         "@remix-pwa/dev": "^3.1.0",

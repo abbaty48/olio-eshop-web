@@ -33,11 +33,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
             where: whereClause,
             skip: (page - 1) * LIMIT,
             take: LIMIT,
-            include: { Cart: { where: { customerId: identity?.id }, select: { cartId: true } } }
+            include: { Cart: { where: { customerId: identity?.id ?? '' }, select: { cartId: true } } }
         })
     ])
 
-    const recommendedProducts = payload.length === 0 && Promise.resolve(prismaDB.product.findMany({ take: 10, orderBy: { createdAt: 'desc' }, include: { Cart: { where: { customerId: identity?.id }, select: { cartId: true } } } }))
+    const recommendedProducts = payload.length === 0 && Promise.resolve(prismaDB.product.findMany({ take: 10, orderBy: { createdAt: 'desc' }, include: { Cart: { where: { customerId: identity?.id ?? '' }, select: { cartId: true } } } }))
 
     const hasPreviousData = page > 1;
     const hasNextData = page < Math.ceil(count / LIMIT)

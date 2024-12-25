@@ -21,7 +21,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
                 skip: (page - 1) * LIMIT,
                 take: LIMIT,
                 orderBy: { createdAt: 'asc' },
-                include: { Cart: { where: { customerId: identity?.id }, select: { cartId: true } } }
+                include: { Cart: { where: { customerId: { equals: identity?.id ?? '' } }, select: { cartId: true } } }
             })
         ]
     )

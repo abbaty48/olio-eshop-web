@@ -1,16 +1,9 @@
-import { useState } from "react";
-import { MdClose } from "react-icons/md";
-import { Link } from "@remix-run/react";
 import { RiMenu4Line } from "react-icons/ri";
-import { AccessoriesIcon, ForKidsIcon, KitchenIcon, LivingRoomIcon, OfficeIcon } from './menuIcons';
-
-const categories = [
-    { label: 'Living Room', path: 'living-room', icon: <LivingRoomIcon /> },
-    { label: 'Office', path: 'office', icon: <OfficeIcon /> },
-    { label: 'Kids', path: 'kids', icon: <ForKidsIcon /> },
-    { label: 'Kitchen', path: 'kitchen', icon: <KitchenIcon /> },
-    { label: 'Shop', path: 'shop', icon: <AccessoriesIcon /> },
-]
+import { categories } from "~/modules/utils";
+import { NavLink } from "@remix-run/react";
+import { MdClose } from "react-icons/md";
+import { useState } from "react";
+import clsx from "clsx";
 
 export function Menu() {
     const [shown, set] = useState(false)
@@ -21,12 +14,13 @@ export function Menu() {
                 <MdClose />
             </button>
             <ul className="mt-10 mb-4 space-y-10">
-                {categories.map(({ label, path, icon }) => {
+                {categories.map(({ label, path, icon: Icon }) => {
                     return (
                         <li key={path}>
-                            <Link to={`/products/${path}`} className="flex justify-between items-center md:text-[1.8rem] uppercase hover:text-primary">
-                                {label} {icon}
-                            </Link>
+                            <NavLink to={`/products/${path}`} prefetch="intent" viewTransition replace
+                                className={({ isActive }) => clsx('flex justify-between items-center md:text-[1.8rem] uppercase hover:text-primary', 'hover:text-primary', isActive && 'text-primary')}>
+                                {label} <Icon />
+                            </NavLink>
                         </li>
                     )
                 }

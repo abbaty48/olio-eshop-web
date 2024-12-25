@@ -1,5 +1,5 @@
-import { RecommendProducts, } from '~/components/recommendProducts';
 import { useLoaderData, useFetcher, useNavigation } from '@remix-run/react';
+import { RecommendProducts, } from '~/components/recommendProducts';
 import ImageMagnifier from '~/components/imageZoom/zoom';
 import { getIdentity } from '~/modules/.servers/session/auth';
 import { LoaderFunctionArgs } from '@remix-run/node';
@@ -14,7 +14,7 @@ import { ImSpinner2 } from 'react-icons/im';
 export async function loader({ params, request }: LoaderFunctionArgs) {
     const identity = await getIdentity(request)
 
-    const product = await prismaDB.product.findUnique({ where: { id: params.id }, include: { Cart: { where: { customerId: identity?.id }, select: { cartId: true, quantity: true, subPrice: true } } } })
+    const product = await prismaDB.product.findUnique({ where: { id: params.id }, include: { Cart: { where: { customerId: identity?.id ?? '' }, select: { cartId: true, quantity: true, subPrice: true } } } })
     const recommendedProducts = new Promise<TProduct[]>(resolve => resolve(prismaDB.product.findMany({
         take: 10,
         where: {
@@ -25,7 +25,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
                 { material: { contains: product?.material } }
             ],
         },
-        include: { Cart: { where: { customerId: identity?.id }, select: { cartId: true } } }
+        include: { Cart: { where: { customerId: identity?.id ?? '' }, select: { cartId: true } } }
     })))
     return { product, recommendedProducts }
 }
